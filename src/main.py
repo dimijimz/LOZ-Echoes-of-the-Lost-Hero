@@ -47,7 +47,7 @@ def main():
             print("You cannot turn back. The only path is forward. Type 'forward' or 'w' to step ahead.")
     
     
-    #MAIN GAME LOOP
+    #MAIN GAME LOOP (Checks the players health or alive)
     while check_player_health(link):
         command = input("What would you like to do? [move, scan, quit game] ")
 
