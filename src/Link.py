@@ -86,7 +86,7 @@ class Link:
             print(f"The Echo Lens has been upgraded! You can now scan {self.echo_lens_strength} steps away.")
         else:
             print("The Echo Lens is already at its maximum strength.")
-
+# Unlock - Door
     def unlock_door(self, room_objects):
         if self.has_key:
             print("You use the key to unlock the door.")
