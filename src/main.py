@@ -11,7 +11,7 @@ def main():
     # Retrieve dungeon size and room objects
     dungeon_size = get_dungeon_size()
     room_objects = get_room_objects()
-
+## Start of the adventure
     while True:
         command = input("Type 'start' to begin the quest of the Lost Hero: ")
         if command.lower() == "start":
