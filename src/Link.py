@@ -42,7 +42,7 @@ class Link:
                 self.position["x"] -= 1
         else:
             print(f"Moved {self.facing}.")
-
+# Scan - Echo Lens
     def scan(self, room_objects):
         if not self.has_echo_lens:
             print("You cannot scan without the Echo Lens.")
@@ -69,7 +69,7 @@ class Link:
                 scanned_objects.append("Empty space")
 
         print(f"Echo Lens Scan: {', '.join(scanned_objects)}")
- 
+ # Obtain Echo Lens
     def obtain_echo_lens(self):
         self.has_echo_lens = True
         self.echo_lens_strength = 1  # Initial scan range of 1 step
