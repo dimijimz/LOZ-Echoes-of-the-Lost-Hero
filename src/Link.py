@@ -10,7 +10,7 @@ class Link:
         self.has_echo_lens = False # Link starts without the Echo Lens
         self.echo_lens_strength = 0
         self.has_key = False
-    
+    # move - Movement
     def move(self, direction, dungeon_size):
         # Update Link's position based on the direction the player inputs.
         if direction == "forward" or direction == "w":
