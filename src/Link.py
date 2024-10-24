@@ -9,6 +9,7 @@ class Link:
         self.facing = "forward"  # Link starts by facing forward.
         self.has_echo_lens = False # Link starts without the Echo Lens
         self.echo_lens_strength = 0
+        self.has_key = False
     
     def move(self, direction, dungeon_size):
         # Update Link's position based on the direction the player inputs.
@@ -29,7 +30,7 @@ class Link:
         
         # Ensure Link doesn't walk out of bounds (dungeon walls).
         if self.position["x"] < 0 or self.position["x"] >= dungeon_size["width"] or self.position["y"] < 0 or self.position["y"] >= dungeon_size["height"]:
-            print("You walk straight into a wall. Guess we can't go that way!")
+            print("You walk straight into a wall. I guess we can't go that way!")
             # Move Link back to avoid going outside the dungeon
             if direction == "forward":
                 self.position["y"] -= 1
@@ -85,3 +86,10 @@ class Link:
             print(f"The Echo Lens has been upgraded! You can now scan {self.echo_lens_strength} steps away.")
         else:
             print("The Echo Lens is already at its maximum strength.")
+
+    def unlock_door(self, room_objects):
+        if self.has_key:
+            print("You use the key to unlock the door.")
+            #room_objects[door_position] = "Unlocked Door"
+        else:
+            print("You attempt to open the door and it won't budge. Maybe a key will help?")

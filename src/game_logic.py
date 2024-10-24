@@ -3,10 +3,8 @@ dungeon_size = {"width": 5, "height": 5}
 
 # Objects in the room
 room_objects = {
-    (1, 0): "Chest with a Key",
-    (0, 5): "Door",
-    (4, 0): "Heavy Skeleton Skull",
-    (1, 1): "Pressure Plate"
+    (2, 1): "Chest",
+    (2, 4): "Locked Door",
 }
 
 def check_player_health(link):

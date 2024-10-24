@@ -5,7 +5,7 @@ import time
 def main():
     print("Welcome to Legend of Zelda: Echoes of the Lost Hero!")
     
-    # Create a new instance of Link
+    # Create a new instance of class: Link
     link = Link()
 
     # Retrieve dungeon size and room objects
@@ -24,10 +24,10 @@ def main():
         else:
             print("Invalid command. Please try typing 'start'.")
 
+# First step and discovery of the Echo Lens
     while True:
         first_move = input("\nYour body feels stiff, hesitant, yet an invisible force drives you onward. Type 'forward' or 'w' to step ahead: ")
         if first_move.lower() == "forward" or first_move.lower() == "w":
-        # Enhanced first move and discovery of the Echo Lens
             print("\nYou take a trembling step forward. The silence is shattered by the sudden crunch beneath your foot.")
             print("Startled, you reach down and your hand closes around the object. It's been damaged, but faintly alive,")
             print("pulsing with warmth. Though you cannot see it, the sensation of its energy courses through your fingertips.")
@@ -41,7 +41,7 @@ def main():
             print("\nThe voice is familiar, yet unknown, as if it has always been a part of you. You feel a connection to the object,")
             print("as if it holds the key to navigating this endless darkness. Not through sight, but through the echoes of sound and instinct.")
             print("This will guide you through the eternal darkness. Without it, the path ahead would be lost to you forever.")
-            link.obtain_echo_lens()  # Link obtains the Echo Lens
+            link.obtain_echo_lens()  # Link obtains the Echo Lens!
             break
         else:
             print("You cannot turn back. The only path is forward. Type 'forward' or 'w' to step ahead.")
