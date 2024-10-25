@@ -6,7 +6,7 @@ room_objects = {
     (2, 1): "Chest",
     (2, 4): "Locked Door",
 }
-
+# Check players health (Alive or Dead)
 def check_player_health(link):
     if link.health > 0:
         return True
