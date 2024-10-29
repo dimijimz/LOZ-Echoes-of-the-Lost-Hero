@@ -1,5 +1,5 @@
 from Link import Link 
-from game_logic import check_player_health, get_dungeon_size, get_room_objects
+from game_logic import check_player_health, generate_room
 import time
 
 def main():
@@ -23,8 +23,7 @@ def main():
     link = Link()
 
     # Retrieve dungeon size and room objects
-    dungeon_size = get_dungeon_size()
-    room_objects = get_room_objects()
+    dungeon_size, room_objects = generate_room()
 ## Start of the adventure
     while True:
         command = input("Type 'start' to begin the quest of the Lost Hero: ")
@@ -80,7 +79,16 @@ def main():
     
     #MAIN GAME LOOP (Checks the players health or alive)
     while check_player_health(link):
-        command = input("What would you like to do? [move, scan, quit game] ")
+        options = ["move", "scan", "quit game"]
+        for obj in link.nearby_objects:
+            if obj == "Locked Door":
+                options.append("unlock door")
+            elif obj == "Chest":
+                options.append("open chest")
+            elif obj == "Key":
+                options.append("use key")
+
+        command = input(f"What would you like to do? {options}: ")
 
         if command == "quit" or command == "quit game":
 
@@ -88,14 +96,32 @@ def main():
             break
 
         elif command == "scan":
-            link.scan(room_objects)
+            link.scan(room_objects, dungeon_size)
 
         elif command == "move":
             direction = input("What direction? [forward(W),backward(S),left(A),right(D)]")
             link.move(direction, dungeon_size)
+            link.nearby_objects = {}
+
+        elif command == "open door" and "Locked Door" in link.nearby_objects:
+            if link.has.key:
+                print("You use the key to unlock the door and step through it. Upon entering, the door slams shut behind you.")
+                dungeon_size, room_objects = generate_room()
+                link.has_key = False
+                link.nearby_objects = {}
+            else:
+                print("You attempt to open the door and it won't budge.")
+        elif command == "open chest" and "Chest" in link.nearby_objects:
+            print("You open the chest...")
+            if not link.has.key:
+                link.obtain_key()
+            else:
+                print("The chest is empty.")
+        elif command == "light torch" and "Torch Stand" in link.nearby_objects:
+            print("You light the torch...")                
 
         else:
-            print("Invalid command. Please try again.")
+            print("Invalid command or no object nearby to interact with.")
 
 if __name__ == "__main__":
     main()
