@@ -1,3 +1,15 @@
+import random
+
+# Define the minimum size of the rooms
+MIN_ROOM_SIZE = 10
+
+# Define the size of the dungeon (room) and its objects
+def generate_room():
+    width = random.randint(MIN_ROOM_SIZE, MIN_ROOM_SIZE + 5)
+    height = random.randint(MIN_ROOM_SIZE, MIN_ROOM_SIZE + 5)
+
+# Initial room size dictionary
+    room_size = {"width": width, "height": height}
 # Define the size of the dungeon (room) and its objects
 dungeon_size = {"width": 5, "height": 5}
 

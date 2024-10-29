@@ -3,7 +3,21 @@ from game_logic import check_player_health, get_dungeon_size, get_room_objects
 import time
 
 def main():
-    print("Welcome to Legend of Zelda: Echoes of the Lost Hero!")
+    print(r"""
+          
+                              .___.
+          /)               ,-^     ^-.
+         //               /           \
+.-------| |--------------/  __     __  \-------------------.__
+|WMWMWMW| |>>>>>>>>>>>>> | />>\   />>\ |>>>>>>>>>>>>>>>>>>>>>>:>
+`-------| |--------------| \__/   \__/ |-------------------'^^
+         \\               \    /|\    /
+          \)               \   \_/   /
+                            |       |
+                            |+H+H+H+|
+                            \       /
+                             ^-----^
+          Welcome to Legend of Zelda: Echoes of the Lost Hero!""")
     
     # Create a new instance of class: Link
     link = Link()
@@ -16,11 +30,18 @@ def main():
         command = input("Type 'start' to begin the quest of the Lost Hero: ")
         if command.lower() == "start":
             print("\nThe void of The Depths envelops you. There is no light, no form, only an overwhelming sense of emptiness.")
+            time.sleep(3)
             print("This isn't the mere absence of light; it's as though the very fabric of reality is pulling you into itself.")
+            time.sleep(3)            
             print("You try to blink, but there are no eyes to close. A chilling realization grips you— your sight has been stolen.")
+            time.sleep(3)            
             print("You stand alone in silence, the ground beneath your feet cold and unfamiliar, a twisted echo of a world lost to darkness.")
-            print("And yet... something within compels you forward. As if moving is the only answer in a place that offers none.")
+            time.sleep(3)            
+            print("And yet... something within compels you forward. As if moving is the only answer in a place that offers nothing.")
             break
+        elif command.lower() == "quit":
+            print("Thanks for playing!")
+            exit()
         else:
             print("Invalid command. Please try typing 'start'.")
 
@@ -35,7 +56,17 @@ def main():
             print("The whisper grows, like an echo bouncing off unseen walls, until it becomes clear. It speaks a name:")
              # Adding a pause for the reveal of the Echo Lens
             time.sleep(15) #15 is the best pause time for this part
-            print("\n\t *** THE ECHO LENS ***")
+            print(r"""
+    _               _
+  .'_`\           .' `\
+ (_( \ \         (_( \ \
+      \ \             \ \
+       \ \ ____________\ \
+        \.'====. = .===='.\
+        ((      ) (      ))
+         \\____//^\\____//
+          '----'   '----'
+                   *** THE ECHO LENS ***""")
 
             time.sleep(4) #slight 4 pause and new line for dramatic effect
             print("\nThe voice is familiar, yet unknown, as if it has always been a part of you. You feel a connection to the object,")

@@ -1,37 +1,38 @@
 import time
+from game_logic import get_room_objects, check_player_health
+
 class Link:
     def __init__(self, health=3, start_x=0, start_y=0):
-        # This is the constructor. It runs when we create an instance of Link.
-        # `self.health = health` means we're giving Link an initial health value (default is 3).
-        # `self.position` will track where Link is in the dungeon, starting at (0, 0).
+        # Initial attributes for Link
         self.health = health
         self.position = {"x": start_x, "y": start_y}
-        self.facing = "forward"  # Link starts by facing forward.
-        self.has_echo_lens = False # Link starts without the Echo Lens
-        self.echo_lens_strength = 0
-        self.has_key = False
-    # move - Movement
+        self.facing = "forward"  # Link starts facing forward
+        self.has_echo_lens = False  # Link starts without the Echo Lens
+        self.echo_lens_strength = 0  # Echo Lens strength starts at 0
+        self.has_key = False  # Link starts without a key
+
     def move(self, direction, dungeon_size):
-        # Update Link's position based on the direction the player inputs.
+        # Update Link's position based on movement direction
         if direction == "forward" or direction == "w":
-            self.position["y"] += 1  # Moving forward increases Y value (moves down)
+            self.position["y"] += 1
             self.facing = "forward"
         elif direction == "backward" or direction == "s":
-            self.position["y"] -= 1  # Moving backward decreases Y value (moves up)
+            self.position["y"] -= 1
             self.facing = "backward"
         elif direction == "left" or direction == "a":
-            self.position["x"] -= 1  # Moving left decreases X value (moves left)
+            self.position["x"] -= 1
             self.facing = "left"
         elif direction == "right" or direction == "d":
-            self.position["x"] += 1  # Moving right increases X value (moves right)
+            self.position["x"] += 1
             self.facing = "right"
         else:
             print("Invalid direction.")
-        
-        # Ensure Link doesn't walk out of bounds (dungeon walls).
-        if self.position["x"] < 0 or self.position["x"] >= dungeon_size["width"] or self.position["y"] < 0 or self.position["y"] >= dungeon_size["height"]:
+
+        # Ensure Link doesn’t move out of dungeon bounds
+        if self.position["x"] < 0 or self.position["x"] >= dungeon_size["width"] or \
+           self.position["y"] < 0 or self.position["y"] >= dungeon_size["height"]:
             print("You walk straight into a wall. I guess we can't go that way!")
-            # Move Link back to avoid going outside the dungeon
+            # Move Link back to original position
             if direction == "forward":
                 self.position["y"] -= 1
             elif direction == "backward":
@@ -42,34 +43,59 @@ class Link:
                 self.position["x"] -= 1
         else:
             print(f"Moved {self.facing}.")
-# Scan - Echo Lens
+
     def scan(self, room_objects):
+        # Check if Link has the Echo Lens
         if not self.has_echo_lens:
             print("You cannot scan without the Echo Lens.")
             return
 
-        # Determine scan range based on the Echo Lens' strength
-        scan_range = self.echo_lens_strength
-        scanned_objects = []
+        # Limited scan if Echo Lens strength is less than 2
+        if self.echo_lens_strength < 2:
+            print("Echo Lens Scan:")
+            for step in range(1, self.echo_lens_strength + 1):
+                # Determine target position based on Link's facing direction
+                if self.facing == "forward":
+                    target = (self.position["x"], self.position["y"] + step)
+                elif self.facing == "backward":
+                    target = (self.position["x"], self.position["y"] - step)
+                elif self.facing == "left":
+                    target = (self.position["x"] - step, self.position["y"])
+                elif self.facing == "right":
+                    target = (self.position["x"] + step, self.position["y"])
 
-        for step in range(1, scan_range + 1):
-            if self.facing == "forward":
-                target = (self.position["x"], self.position["y"] + step)
-            elif self.facing == "backward":
-                target = (self.position["x"], self.position["y"] - step)
-            elif self.facing == "left":
-                target = (self.position["x"] - step, self.position["y"])
-            elif self.facing == "right":
-                target = (self.position["x"] + step, self.position["y"])
+                # Check if there is an object in that direction
+                if target in room_objects:
+                    print(f"- {room_objects[target]} ahead")
+                else:
+                    print("- Empty space ahead")
+            return
 
-            # Check if there's something in that direction
-            if target in room_objects:
-                scanned_objects.append(room_objects[target])
-            else:
-                scanned_objects.append("Empty space")
+        # Full-room scan if Echo Lens strength is 2 or more
+        print("Echo Lens: ‘Scanning the room… the echoes reveal the unseen.’")
+        detected_objects = []
 
-        print(f"Echo Lens Scan: {', '.join(scanned_objects)}")
- # Obtain Echo Lens
+        # Loop through each object in the room and calculate relative position
+        for pos, obj in room_objects.items():
+            dx = pos[0] - self.position["x"]
+            dy = pos[1] - self.position["y"]
+
+            # Skip Link's current position
+            if dx == 0 and dy == 0:
+                continue
+            
+            # Determine directions based on relative position
+            direction_fb = "forward" if dy > 0 else "backward"
+            direction_lr = "right" if dx > 0 else "left"
+            
+            # Format the output for each detected object
+            detected_objects.append(f"{obj}: {abs(dy)} step(s) {direction_fb}, {abs(dx)} step(s) {direction_lr}")
+        
+        # Print all detected objects in the room
+        print("Objects detected:")
+        for item in detected_objects:
+            print(f"- {item}")
+
     def obtain_echo_lens(self):
         self.has_echo_lens = True
         self.echo_lens_strength = 1  # Initial scan range of 1 step
@@ -79,14 +105,13 @@ class Link:
         print("helping you sense what lies just beyond your reach. Its secrets, however, remain shrouded for now.")
         time.sleep(9)
 
-
     def upgrade_echo_lens(self):
         if self.echo_lens_strength < 2:  # Upgrade allows up to 2 steps of scanning
             self.echo_lens_strength += 1
             print(f"The Echo Lens has been upgraded! You can now scan {self.echo_lens_strength} steps away.")
         else:
             print("The Echo Lens is already at its maximum strength.")
-# Unlock - Door
+
     def unlock_door(self, room_objects):
         if self.has_key:
             print("You use the key to unlock the door.")
