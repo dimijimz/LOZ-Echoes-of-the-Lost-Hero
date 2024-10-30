@@ -68,41 +68,40 @@ class Link:
         print("Echo Lens: ‘Scanning now...’")
         wall_detected = False
 
-        # Loop to detect objects within scan range
-        for step in range(1, scan_range + 1):
-            directions = {
-                "forward": (self.position["x"], self.position["y"] + step),
-                "backward": (self.position["x"], self.position["y"] - step),
-                "left": (self.position["x"] - step, self.position["y"]),
-                "right": (self.position["x"] + step, self.position["y"])
-            }
-             # For each direction, detect objects within the scan range
-            for direction, (dx, dy) in directions.items():
-                for step in range(1, scan_range + 1):
-                    target_position = (self.position["x"] + dx * step, self.position["y"] + dy * step)
-            
-                    # Check if the target is within dungeon bounds
-                    x, y = target_position
-                    if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
-                        # Detect objects within range
-                        if target_position in room_objects:
-                            obj = room_objects[target_position]
-                            self.nearby_objects[obj] = target_position
-                            print(f"Detected {obj} {step} step(s) {direction}.")
-                            detected_objects.append(f"{obj} detected {step} step(s) {direction}.")
-                            break  # Stop further scanning in this direction if an object is detected
-                    else:
-                        # Mark wall detection and stop further in this direction
-                        detected_objects.append(f"Wall detected {step} step(s) {direction}.")
-                        break
+        # Dictionary to store each detected object or wall for single output
+        directions = {
+            "forward": (0, 1),
+            "backward": (0, -1),
+            "left": (-1, 0),
+            "right": (1, 0)
+        }
 
-                # Print detected objects or wall info if any were detected
-                if detected_objects:
-                    print("Objects detected:")
-                    for item in detected_objects:
-                        print(f"- {item}")
+        # For each direction, detect objects within the scan range
+        for direction, (dx, dy) in directions.items():
+            for step in range(1, scan_range + 1):
+                target_position = (self.position["x"] + dx * step, self.position["y"] + dy * step)
+            
+                # Check if the target is within dungeon bounds
+                x, y = target_position
+                if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
+                    # Detect objects within range
+                    if target_position in room_objects:
+                        obj = room_objects[target_position]
+                        self.nearby_objects[obj] = target_position
+                        detected_objects.append(f"{obj} detected {step} step(s) {direction}.")
+                        break  # Stop further scanning in this direction if an object is detected
                 else:
-                    print("No objects or walls are in your immediate surroundings.")
+                    # Mark wall detection and stop further in this direction
+                    detected_objects.append(f"Wall detected {step} step(s) {direction}.")
+                    break
+
+        # Print detected objects or wall info once
+        if detected_objects:
+            print("Objects detected:")
+            for item in detected_objects:
+                print(f"- {item}")
+        else:
+            print("No objects or walls are in your immediate surroundings.")
 
     # Function to unlock the door
     def unlock_door(self):
