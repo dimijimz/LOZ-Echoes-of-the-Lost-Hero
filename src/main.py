@@ -1,5 +1,5 @@
 from Link import Link 
-from game_logic import check_player_health, generate_fixed_room
+from game_logic import generate_fixed_room
 import time
 
 def main():
@@ -17,7 +17,10 @@ def main():
                             |+H+H+H+|
                             \       /
                              ^-----^
-          Welcome to Legend of Zelda: Echoes of the Lost Hero!\n A game developed by Dimitri Jimenez""")
+          Welcome to Legend of Zelda: Echoes of the Lost Hero!
+          
+         A text-based adventure game created in Python fully developed by Dimitri Jimenez
+          """)
     
     # Create a new instance of class: Link
     link = Link()
@@ -32,13 +35,13 @@ def main():
         command = input("Type 'start' to begin the quest of the Lost Hero: ")
         if command.lower() == "start":
             print("\nThe void of The Depths envelops you. There is no light, no form, only an overwhelming sense of emptiness.")
-            time.sleep(3)
+            time.sleep(5)
             print("This isn't the mere absence of light; it's as though the very fabric of reality is pulling you into itself.")
-            time.sleep(3)            
+            time.sleep(5)            
             print("You try to blink, but there are no eyes to close. A chilling realization grips you— your sight has been stolen.")
-            time.sleep(3)            
+            time.sleep(5)            
             print("You stand alone in silence, the ground beneath your feet cold and unfamiliar, a twisted echo of a world lost to darkness.")
-            time.sleep(3)            
+            time.sleep(5)            
             print("And yet... something within compels you forward. As if moving is the only answer in a place that offers nothing.")
             break
         elif command.lower() == "quit":
@@ -84,7 +87,7 @@ def main():
     
     #MAIN GAME LOOP (Checks the players health or alive)
       # Main game loop
-    while check_player_health(link) and current_room <= total_rooms:
+    while link.check_health() and current_room <= total_rooms:
         # Generate the room layout for the current room number
         room_data = generate_fixed_room(current_room)
         dungeon_size = {"width": room_data["width"], "height": room_data["height"]}

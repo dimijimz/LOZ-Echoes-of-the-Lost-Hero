@@ -17,19 +17,36 @@ class Link:
 
     def move(self, direction, dungeon_size):
         # Move Link based on direction and update facing
+        # Normalize input to full direction names
+        direction_map = {
+            "w": "forward",
+            "s": "backward",
+            "a": "left",
+            "d": "right",
+            "forward": "forward",
+            "backward": "backward",
+            "left": "left",
+            "right": "right"
+        }
+    
+        # Convert input to the full direction name
+        if direction in direction_map:
+            direction = direction_map[direction]
+        else:
+            print("Invalid direction.")
+            return
+        
+         # Apply the movement
         moves = {
             "forward": (0, 1),
             "backward": (0, -1),
             "left": (-1, 0),
             "right": (1, 0)
         }
-        if direction in moves:
-            dx, dy = moves[direction]
-            self.position["x"] += dx
-            self.position["y"] += dy
-            self.facing = direction
-        else:
-            print("Invalid direction.")
+        dx, dy = moves[direction]
+        self.position["x"] += dx
+        self.position["y"] += dy
+        self.facing = direction
 
         # Ensure Link doesn’t move out of dungeon bounds
         if not (0 <= self.position["x"] < dungeon_size["width"] and 0 <= self.position["y"] < dungeon_size["height"]):
@@ -70,10 +87,13 @@ class Link:
             direction_lr = "right" if dx > 0 else "left"
             detected_objects.append(f"{obj}: {abs(dy)} step(s) {direction_fb}, {abs(dx)} step(s) {direction_lr}")
 
-        # Print detected objects
-        print("Objects detected:")
+        # Print detected objects or "No objects detected" if list is empty
+        if detected_objects:
+            print("Objects detected:")
         for item in detected_objects:
             print(f"- {item}")
+        else:
+            print("No objects or walls are in front of you.")
 
     def is_in_front(self, dx, dy):
         # Helper method to check if object is in front based on Link's facing direction
@@ -117,3 +137,8 @@ class Link:
             print(f"The Echo Lens has been upgraded! You can now scan {self.echo_lens_strength} steps away.")
         else:
             print("The Echo Lens is already at its maximum strength.")
+
+    
+    def check_health(self):
+        """Check if Link's health is above zero."""
+        return self.health > 0
