@@ -66,6 +66,7 @@ class Link:
         # Set scan range based on echo lens strength
         scan_range = max(2, self.echo_lens_strength)  # Ensures a minimum range of 2 for early exploration     
         print("Echo Lens: ‘Scanning now...’")
+        wall_detected = False
 
         # Loop to detect objects within scan range
         for step in range(1, scan_range + 1):
