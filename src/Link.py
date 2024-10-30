@@ -76,25 +76,30 @@ class Link:
             "right": (1, 0)
         }
 
+        # First, check if Link is on top of any object
+        if (self.position["x"], self.position["y"]) in room_objects:
+            obj = room_objects[(self.position["x"], self.position["y"])]
+            self.nearby_objects[obj] = (self.position["x"], self.position["y"])
+            print(f"{obj} is right in front of you.")
+
         # For each direction, detect objects within the scan range
         for direction, (dx, dy) in directions.items():
             for step in range(1, scan_range + 1):
                 target_position = (self.position["x"] + dx * step, self.position["y"] + dy * step)
-            
-                # Check if the target is within dungeon bounds
-                x, y = target_position
-                if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
-                    # Detect objects within range
-                    if target_position in room_objects:
-                        obj = room_objects[target_position]
-                        if step == 1:
-                            self.nearby_objects[obj] = target_position
-                        detected_objects.append(f"{obj} detected {step} step(s) {direction}.")
-                        break  # Stop further scanning in this direction if an object is detected
-                else:
-                    # Mark wall detection and stop further in this direction
-                    detected_objects.append(f"Wall detected {step} step(s) {direction}.")
-                    break
+        
+            # Check if the target is within dungeon bounds
+            x, y = target_position
+            if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
+                # Detect objects within range
+                if target_position in room_objects:
+                    obj = room_objects[target_position]
+                    self.nearby_objects[obj] = target_position
+                    detected_objects.append(f"{obj} detected {step} step(s) {direction}.")
+                    break  # Stop further scanning in this direction if an object is detected
+            else:
+                # Mark wall detection and stop further in this direction
+                detected_objects.append(f"Wall detected {step} step(s) {direction}.")
+                break
 
         # Print detected objects or wall info once
         if detected_objects:
