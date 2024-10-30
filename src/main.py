@@ -2,6 +2,7 @@ from Link import Link
 from game_logic import generate_fixed_room
 import time
 
+
 def main():
     print(r"""
             _
@@ -46,23 +47,27 @@ def main():
            \V/          A text-based adventure game created in Python fully developed by Dimitri Jimenez
           """)
 
-    # Create a new instance of class: Link
+    # Create a new instance of the Link class, representing the player
     link = Link()
 
-    # Define total number of rooms and initialize room tracking
+    # Define the total number of rooms in the game
     total_rooms = 10
-    current_room = 1
+    current_room = 1 # Starts from the first room
+    special_event_completed = False  # Flag to track if the special event has been completed
 
-    ## Start of the adventure
+    
+
+    ## Start of the adventure ##
     while True:
         command = input("Type 'start' to begin the quest of the Lost Hero: ")
-        # Skips the intro
+        # Option to skip the intro
         if command.lower() == "skip":
-            print("Skipping the intro... Prepare to enter the game directly!")
+            print("Skipping the intro... Prepare yourself!")
             link.obtain_echo_lens()  # Grant the Echo Lens instantly
             break  # Exit this loop and move to the main game loop
 
         elif command.lower() == "start":
+             # Narrative introduction with time delays for dramatic effect
             print("\nThe void of The Depths envelops you. There is no light, no form, only an overwhelming sense of emptiness.")
             time.sleep(5)
             print("This isn't the mere absence of light; it's as though the very fabric of reality is pulling you into itself.")
@@ -73,10 +78,10 @@ def main():
             time.sleep(5)            
             print("And yet... something within compels you forward. As if moving is the only answer in a place that offers nothing.")
             time.sleep(5)
-            break
+            break # Exits the intro loop and start the first step sequence
         elif command.lower() == "quit":
             print("Thanks for playing!")
-            exit()
+            exit() # Exit the game
         else:
             print("Invalid command. Please try typing 'start'.")
 
@@ -84,6 +89,7 @@ def main():
         while True:
             first_move = input("\nYour body feels stiff, hesitant, yet an invisible force drives you onward. Type 'forward' or 'w' to step ahead: ")
             if first_move.lower() in ["forward", "w"]:
+                 # Narrative for discovering the Echo Lens
                 print("\nYou take a trembling step forward. The silence is shattered by the sudden crunch beneath your foot.")
                 time.sleep(5)
                 print("Startled, you reach down and your hand closes around the object. It's been damaged, but faintly alive,")
@@ -127,7 +133,7 @@ def main():
                 print("as if it holds the key to navigating this endless darkness. Not through sight, but through the echoes of sound and instinct.")
                 print("This will guide you through the eternal darkness. Without it, the path ahead would be lost to you forever.")
                 link.obtain_echo_lens()  # Link obtains the Echo Lens!
-                break
+                break # Exits the first step loop
             else:
                 print("You cannot turn back. The only path is forward. Type 'forward' or 'w' to step ahead.")
         
@@ -140,13 +146,13 @@ def main():
 
         print(f"\nEntering Room {current_room}")
 
-        # Room 5 Echo Lens Upgrade Cutscene
-        if current_room == 5:
+        # Special event in Room 5: Echo Lens Upgrade
+        if current_room == 5 and not special_event_completed:
             print("\nYou feel an undeniable pull, as though the Echo Lens itself is urging you forward. The lens trembles in your hand, then slips free,")
             print("floating just beyond your reach. Darkness settles around you again, but a faint hum from the Lens pulses ahead.")
             time.sleep(2)
 
-            # Prompting player input to move forward
+            # Prompting player input to move forward (Call back to the intro)
             while True:
                 advance = input("\nThe only way is forward. Type 'forward' or 'w' to step toward the unknown: ")
                 if advance.lower() in ["forward", "w"]:
@@ -163,15 +169,17 @@ def main():
             time.sleep(1.5)
             print("\nThis is no ordinary room. The Echo Lens reveals it as a Hall of Resonance, a place designed to amplify echoes and energy.")
             print("With each pulse of the lens, the chamber's walls seem to breathe, revealing shifting pathways and subtle inscriptions that whisper of ancient secrets.")
-    
+            # Upgrade Echo Lens
             link.upgrade_echo_lens()
             print("\nThe power of the Echo Lens has expanded; you sense the entire room as if each detail is woven into your mind. The lens feels")
             print("like a part of you now, attuned to reveal depths beyond sight. You move forward, guided by its amplified resonance.")
-            continue  # Continue to the next loop iteration for interaction
+            time.sleep(5)
+            special_event_completed = True # Special event completed
 
         # Room interaction loop
         while True:
             options = ["move", "scan", "quit game"]
+            # List of available options for the player
             for obj, pos in link.nearby_objects.items():
                 if obj == "Locked Door" and (link.position["x"], link.position["y"]) == pos:
                     options.append("open door")
@@ -211,7 +219,7 @@ def main():
             else:
                 print("Invalid command or no object nearby to interact with.")
 
-
+    # Game completion message
     print("\nCongratulations, you've completed the dungeon!")
     print("Thanks for playing Legend of Zelda: Echoes of the Lost Hero!")
 
