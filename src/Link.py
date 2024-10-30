@@ -87,7 +87,8 @@ class Link:
                     # Detect objects within range
                     if target_position in room_objects:
                         obj = room_objects[target_position]
-                        self.nearby_objects[obj] = target_position
+                        if step == 1:
+                            self.nearby_objects[obj] = target_position
                         detected_objects.append(f"{obj} detected {step} step(s) {direction}.")
                         break  # Stop further scanning in this direction if an object is detected
                 else:

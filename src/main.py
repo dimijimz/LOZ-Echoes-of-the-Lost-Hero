@@ -149,32 +149,32 @@ def main():
         print(f"\nEntering Room {current_room}")
 
         # Room 5 Echo Lens Upgrade Cutscene
-    if current_room == 5:
-        print("\nYou feel an undeniable pull, as though the Echo Lens itself is urging you forward. The lens trembles in your hand, then slips free,")
-        print("floating just beyond your reach. Darkness settles around you again, but a faint hum from the Lens pulses ahead.")
-        time.sleep(2)
+        if current_room == 5:
+            print("\nYou feel an undeniable pull, as though the Echo Lens itself is urging you forward. The lens trembles in your hand, then slips free,")
+            print("floating just beyond your reach. Darkness settles around you again, but a faint hum from the Lens pulses ahead.")
+            time.sleep(2)
 
-        # Prompting player input to move forward
-        while True:
-            advance = input("\nThe only way is forward. Type 'forward' or 'w' to step toward the unknown: ")
-            if advance.lower() in ["forward", "w"]:
-                print("\nAs you step forward, the Lens begins to emit a low, resonant tone. Each step draws you closer, the air growing dense with a strange energy.")
-                print("Then, with a final pulse, the Echo Lens returns to your hand, settling with a newfound weight.")
-                time.sleep(3)
-                break
-            else:
-                print("You feel the pull stronger than ever. Type 'forward' or 'w' to step into the unknown.")
+            # Prompting player input to move forward
+            while True:
+                advance = input("\nThe only way is forward. Type 'forward' or 'w' to step toward the unknown: ")
+                if advance.lower() in ["forward", "w"]:
+                    print("\nAs you step forward, the Lens begins to emit a low, resonant tone. Each step draws you closer, the air growing dense with a strange energy.")
+                    print("Then, with a final pulse, the Echo Lens returns to your hand, settling with a newfound weight.")
+                    time.sleep(3)
+                    break
+                else:
+                    print("You feel the pull stronger than ever. Type 'forward' or 'w' to step into the unknown.")
 
-        print("\nHolding the Echo Lens, you sense an undeniable power radiating from it, stronger than ever. As you activate the lens,")
-        print("the surrounding darkness recedes, revealing not just outlines but the entire chamber with a surreal, crystalline clarity.")
+            print("\nHolding the Echo Lens, you sense an undeniable power radiating from it, stronger than ever. As you activate the lens,")
+            print("the surrounding darkness recedes, revealing not just outlines but the entire chamber with a surreal, crystalline clarity.")
     
-        time.sleep(1.5)
-        print("\nThis is no ordinary room. The Echo Lens reveals it as a Hall of Resonance, a place designed to amplify echoes and energy.")
-        print("With each pulse of the lens, the chamber's walls seem to breathe, revealing shifting pathways and subtle inscriptions that whisper of ancient secrets.")
+            time.sleep(1.5)
+            print("\nThis is no ordinary room. The Echo Lens reveals it as a Hall of Resonance, a place designed to amplify echoes and energy.")
+            print("With each pulse of the lens, the chamber's walls seem to breathe, revealing shifting pathways and subtle inscriptions that whisper of ancient secrets.")
     
-        link.upgrade_echo_lens()
-        print("\nThe power of the Echo Lens has expanded; you sense the entire room as if each detail is woven into your mind. The lens feels")
-        print("like a part of you now, attuned to reveal depths beyond sight. You move forward, guided by its amplified resonance.")
+            link.upgrade_echo_lens()
+            print("\nThe power of the Echo Lens has expanded; you sense the entire room as if each detail is woven into your mind. The lens feels")
+            print("like a part of you now, attuned to reveal depths beyond sight. You move forward, guided by its amplified resonance.")
 
 
 
@@ -182,13 +182,11 @@ def main():
         while True:
             # Dynamic options based on nearby objects
             options = ["move", "scan", "quit game"]
-            for obj in link.nearby_objects:
-                if obj == "Locked Door":
+            for obj, pos in link.nearby_objects.items():
+                if obj == "Locked Door" and link.position == pos:
                     options.append("open door")
-                elif obj == "Chest":
+                elif obj == "Chest" and link.position == pos:
                     options.append("open chest")
-                elif obj == "Torch Stand":
-                    options.append("light torch")
             
             # Prompt player for command and provide available options
             command = input(f"What would you like to do? {options}: ")
