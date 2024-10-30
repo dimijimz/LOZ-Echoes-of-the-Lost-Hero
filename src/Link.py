@@ -76,6 +76,7 @@ class Link:
                 "right": (self.position["x"] + step, self.position["y"])
             }
             target_position = directions.get(self.facing)
+
             if not target_position:
                 continue
 
@@ -86,10 +87,15 @@ class Link:
                     self.nearby_objects[obj] = target_position
                     print(f"Detected {obj} {step} step(s) {self.facing}.")
                     detected_objects.append(f"{obj} detected {step} step(s) {self.facing}.")
+                    break  # Stop further scanning if an object is detected
             else:
-                detected_objects.append(f"Wall detected {step} step(s) {self.facing}.")
+                wall_detected = True
+                break
+        # Append wall information if no objects were detected
+        if wall_detected and not detected_objects:
+            detected_objects.append(f"Wall detected {step} step(s) {self.facing}.")
 
-        # Print objects or wall info if detected
+        # Print detected objects or wall info if any were detected
         if detected_objects:
             print("Objects detected:")
             for item in detected_objects:
