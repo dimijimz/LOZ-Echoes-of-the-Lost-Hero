@@ -65,33 +65,34 @@ class Link:
         
         #Reset neaby objects before each scan
         self.nearby_objects = {}
-        detected_objects = []        
+        detected_objects = []
+        scan_range = max(2, self.echo_lens_strength)  # Ensures a minimum range of 2 for early exploration     
 
-         # Scan logic based on Echo Lens strength
-        print("Echo Lens: ‘Scanning the room… the echoes reveal the unseen.’")
-        for pos, obj in room_objects.items():
-            dx, dy = pos[0] - self.position["x"], pos[1] - self.position["y"]
-            distance = max(abs(dx), abs(dy))
-            
-            # Skip objects out of range for current Echo Lens strength
-            if distance > self.echo_lens_strength:
-                continue
+         # Check each direction for walls and objects
+        for step in range(1, scan_range + 1):
+            directions = {
+                "forward": (self.position["x"], self.position["y"] + step),
+                "backward": (self.position["x"], self.position["y"] - step),
+                "left": (self.position["x"] - step, self.position["y"]),
+                "right": (self.position["x"] + step, self.position["y"])
+            }
+            for direction, pos in directions.items():
+                x, y = pos
+                if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
+                    # If within bounds, check for objects
+                    if pos in room_objects:
+                        obj = room_objects[pos]
+                        self.nearby_objects[obj] = pos
+                        detected_objects.append(f"{obj} detected {step} step(s) {direction}")
+                else:
+                    # Out of bounds indicates a wall
+                    detected_objects.append(f"Wall {step} step(s) {direction}")
 
-            # Store interactable objects in front of Link
-            if self.is_in_front(dx, dy):
-                self.nearby_objects[obj] = pos
-                print(f"You sense a {obj} in front of you.")
-
-            # Add details to detected objects
-            direction_fb = "forward" if dy > 0 else "backward"
-            direction_lr = "right" if dx > 0 else "left"
-            detected_objects.append(f"{obj}: {abs(dy)} step(s) {direction_fb}, {abs(dx)} step(s) {direction_lr}")
-
-        # Print detected objects or "No objects detected" if list is empty
+        # Print detected objects or state if no objects are detected
         if detected_objects:
             print("Objects detected:")
-        for item in detected_objects:
-            print(f"- {item}")
+            for item in detected_objects:
+                print(f"- {item}")
         else:
             print("No objects or walls are in front of you.")
 

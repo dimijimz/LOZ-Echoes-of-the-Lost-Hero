@@ -4,22 +4,46 @@ import time
 
 def main():
     print(r"""
-          
-                              .___.
-          /)               ,-^     ^-.
-         //               /           \
-.-------| |--------------/  __     __  \-------------------.__
-|WMWMWMW| |>>>>>>>>>>>>> | />>\   />>\ |>>>>>>>>>>>>>>>>>>>>>>:>
-`-------| |--------------| \__/   \__/ |-------------------'^^
-         \\               \    /|\    /
-          \)               \   \_/   /
-                            |       |
-                            |+H+H+H+|
-                            \       /
-                             ^-----^
-          Welcome to Legend of Zelda: Echoes of the Lost Hero!
-          
-         A text-based adventure game created in Python fully developed by Dimitri Jimenez
+            _
+          .!=!.
+          \===/
+          |>X<|
+          |>X<|
+          |>X<|
+          |>X<|
+          |>X<|
+          |>X<|
+          |>X<|
+         .-----.
+     /\__:-----:__/\
+   ./ ._. \.-./ ._. \.
+ ./ ./  -.  V  .-  \. \.
+/__/      \   /      \__\
+          |! !|
+          |! !|
+         / . . \
+        |!.V V.!|
+         \\ V //
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||        Welcome to Legend of Zelda: Echoes of the Lost Hero!
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+         ||   ||
+          \\ //
+           \V/          A text-based adventure game created in Python fully developed by Dimitri Jimenez
           """)
     
     # Create a new instance of class: Link
@@ -43,6 +67,7 @@ def main():
             print("You stand alone in silence, the ground beneath your feet cold and unfamiliar, a twisted echo of a world lost to darkness.")
             time.sleep(5)            
             print("And yet... something within compels you forward. As if moving is the only answer in a place that offers nothing.")
+            time.sleep(5)
             break
         elif command.lower() == "quit":
             print("Thanks for playing!")
@@ -55,23 +80,44 @@ def main():
         first_move = input("\nYour body feels stiff, hesitant, yet an invisible force drives you onward. Type 'forward' or 'w' to step ahead: ")
         if first_move.lower() == "forward" or first_move.lower() == "w":
             print("\nYou take a trembling step forward. The silence is shattered by the sudden crunch beneath your foot.")
+            time.sleep(5)
             print("Startled, you reach down and your hand closes around the object. It's been damaged, but faintly alive,")
+            time.sleep(5)
             print("pulsing with warmth. Though you cannot see it, the sensation of its energy courses through your fingertips.")
+            time.sleep(5)
             print("As you hold it, a faint yet familiar whisper drifts through the air.")
+            time.sleep(5)
             print("The whisper grows, like an echo bouncing off unseen walls, until it becomes clear. It speaks a name:")
              # Adding a pause for the reveal of the Echo Lens
-            time.sleep(15) #15 is the best pause time for this part
+            time.sleep(5) #15 is the best pause time for this part
             print(r"""
-    _               _
-  .'_`\           .' `\
- (_( \ \         (_( \ \
-      \ \             \ \
-       \ \ ____________\ \
-        \.'====. = .===='.\
-        ((      ) (      ))
-         \\____//^\\____//
-          '----'   '----'
-                   *** THE ECHO LENS ***""")
+    ███        ▄█    █▄       ▄████████          
+▀█████████▄   ███    ███     ███    ███          
+   ▀███▀▀██   ███    ███     ███    █▀           
+    ███   ▀  ▄███▄▄▄▄███▄▄  ▄███▄▄▄              
+    ███     ▀▀███▀▀▀▀███▀  ▀▀███▀▀▀              
+    ███       ███    ███     ███    █▄           
+    ███       ███    ███     ███    ███          
+   ▄████▀     ███    █▀      ██████████          
+                                                 
+   ▄████████  ▄████████    ▄█    █▄     ▄██████▄ 
+  ███    ███ ███    ███   ███    ███   ███    ███
+  ███    █▀  ███    █▀    ███    ███   ███    ███
+ ▄███▄▄▄     ███         ▄███▄▄▄▄███▄▄ ███    ███
+▀▀███▀▀▀     ███        ▀▀███▀▀▀▀███▀  ███    ███
+  ███    █▄  ███    █▄    ███    ███   ███    ███
+  ███    ███ ███    ███   ███    ███   ███    ███
+  ██████████ ████████▀    ███    █▀     ▀██████▀ 
+                                                 
+ ▄█          ▄████████ ███▄▄▄▄      ▄████████    
+███         ███    ███ ███▀▀▀██▄   ███    ███    
+███         ███    █▀  ███   ███   ███    █▀     
+███        ▄███▄▄▄     ███   ███   ███           
+███       ▀▀███▀▀▀     ███   ███ ▀███████████    
+███         ███    █▄  ███   ███          ███    
+███▌    ▄   ███    ███ ███   ███    ▄█    ███    
+█████▄▄██   ██████████  ▀█   █▀   ▄████████▀     
+▀                                                """)
 
             time.sleep(4) #slight 4 pause and new line for dramatic effect
             print("\nThe voice is familiar, yet unknown, as if it has always been a part of you. You feel a connection to the object,")
