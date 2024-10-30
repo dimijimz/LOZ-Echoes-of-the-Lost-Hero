@@ -16,7 +16,6 @@ class Link:
         print("You have found a key! It may open a locked door somewhere.")
 
     def move(self, direction, dungeon_size):
-        # Move Link based on direction and update facing
         # Normalize input to full direction names
         direction_map = {
             "w": "forward",
@@ -28,11 +27,9 @@ class Link:
             "left": "left",
             "right": "right"
         }
-    
-        # Convert input to the full direction name
-        if direction in direction_map:
-            direction = direction_map[direction]
-        else:
+        direction = direction_map.get(direction.lower())
+        
+        if direction is None:
             print("Invalid direction.")
             return
         
@@ -44,17 +41,16 @@ class Link:
             "right": (1, 0)
         }
         dx, dy = moves[direction]
-        self.position["x"] += dx
-        self.position["y"] += dy
-        self.facing = direction
+        new_x, new_y = self.position["x"] + dx, self.position["y"] + dy
+
 
         # Ensure Link doesn’t move out of dungeon bounds
-        if not (0 <= self.position["x"] < dungeon_size["width"] and 0 <= self.position["y"] < dungeon_size["height"]):
-            print("You walk straight into a wall. I guess we can't go that way!")
-            self.position["x"] -= dx  # Undo move
-            self.position["y"] -= dy
-        else:
+        if 0 <= new_x < dungeon_size["width"] and 0 <= new_y < dungeon_size["height"]:
+            self.position["x"], self.position["y"] = new_x, new_y
+            self.facing = direction
             print(f"Moved {self.facing}.")
+        else:
+            print("You walk straight into a wall. I guess we can't go that way!")
 
 
     def scan(self, room_objects, dungeon_size):
@@ -66,9 +62,12 @@ class Link:
         #Reset neaby objects before each scan
         self.nearby_objects = {}
         detected_objects = []
-        scan_range = max(2, self.echo_lens_strength)  # Ensures a minimum range of 2 for early exploration     
 
-         # Check each direction for walls and objects
+        # Set scan range based on echo lens strength
+        scan_range = max(2, self.echo_lens_strength)  # Ensures a minimum range of 2 for early exploration     
+        print("Echo Lens: ‘Scanning now...’")
+
+        # Loop to detect objects within scan range
         for step in range(1, scan_range + 1):
             directions = {
                 "forward": (self.position["x"], self.position["y"] + step),
@@ -76,36 +75,27 @@ class Link:
                 "left": (self.position["x"] - step, self.position["y"]),
                 "right": (self.position["x"] + step, self.position["y"])
             }
-            for direction, pos in directions.items():
-                x, y = pos
-                if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
-                    # If within bounds, check for objects
-                    if pos in room_objects:
-                        obj = room_objects[pos]
-                        self.nearby_objects[obj] = pos
-                        detected_objects.append(f"{obj} detected {step} step(s) {direction}")
-                else:
-                    # Out of bounds indicates a wall
-                    detected_objects.append(f"Wall {step} step(s) {direction}")
+            target_position = directions.get(self.facing)
+            if not target_position:
+                continue
 
-        # Print detected objects or state if no objects are detected
+            x, y = target_position
+            if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
+                if target_position in room_objects:
+                    obj = room_objects[target_position]
+                    self.nearby_objects[obj] = target_position
+                    print(f"Detected {obj} {step} step(s) {self.facing}.")
+                    detected_objects.append(f"{obj} detected {step} step(s) {self.facing}.")
+            else:
+                detected_objects.append(f"Wall detected {step} step(s) {self.facing}.")
+
+        # Print objects or wall info if detected
         if detected_objects:
             print("Objects detected:")
             for item in detected_objects:
                 print(f"- {item}")
         else:
             print("No objects or walls are in front of you.")
-
-    def is_in_front(self, dx, dy):
-        # Helper method to check if object is in front based on Link's facing direction
-        facing_directions = {
-            "forward": (0, 1),
-            "backward": (0, -1),
-            "left": (-1, 0),
-            "right": (1, 0)
-        }
-        fx, fy = facing_directions[self.facing]
-        return dx == fx and dy == fy
 
     # Function to unlock the door
     def unlock_door(self):
