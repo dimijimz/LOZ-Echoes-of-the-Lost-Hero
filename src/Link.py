@@ -1,5 +1,4 @@
 import time
-from game_logic import get_room_objects, check_player_health
 
 class Link:
     def __init__(self, health=3, start_x=0, start_y=0):
@@ -17,37 +16,29 @@ class Link:
         print("You have found a key! It may open a locked door somewhere.")
 
     def move(self, direction, dungeon_size):
-        # Update Link's position based on movement direction
-        if direction == "forward" or direction == "w":
-            self.position["y"] += 1
-            self.facing = "forward"
-        elif direction == "backward" or direction == "s":
-            self.position["y"] -= 1
-            self.facing = "backward"
-        elif direction == "left" or direction == "a":
-            self.position["x"] -= 1
-            self.facing = "left"
-        elif direction == "right" or direction == "d":
-            self.position["x"] += 1
-            self.facing = "right"
+        # Move Link based on direction and update facing
+        moves = {
+            "forward": (0, 1),
+            "backward": (0, -1),
+            "left": (-1, 0),
+            "right": (1, 0)
+        }
+        if direction in moves:
+            dx, dy = moves[direction]
+            self.position["x"] += dx
+            self.position["y"] += dy
+            self.facing = direction
         else:
             print("Invalid direction.")
 
         # Ensure Link doesn’t move out of dungeon bounds
-        if self.position["x"] < 0 or self.position["x"] >= dungeon_size["width"] or \
-           self.position["y"] < 0 or self.position["y"] >= dungeon_size["height"]:
+        if not (0 <= self.position["x"] < dungeon_size["width"] and 0 <= self.position["y"] < dungeon_size["height"]):
             print("You walk straight into a wall. I guess we can't go that way!")
-            # Move Link back to original position
-            if direction == "forward":
-                self.position["y"] -= 1
-            elif direction == "backward":
-                self.position["y"] += 1
-            elif direction == "left":
-                self.position["x"] += 1
-            elif direction == "right":
-                self.position["x"] -= 1
+            self.position["x"] -= dx  # Undo move
+            self.position["y"] -= dy
         else:
             print(f"Moved {self.facing}.")
+
 
     def scan(self, room_objects, dungeon_size):
         # Check if Link has the Echo Lens
@@ -149,10 +140,3 @@ class Link:
             print(f"The Echo Lens has been upgraded! You can now scan {self.echo_lens_strength} steps away.")
         else:
             print("The Echo Lens is already at its maximum strength.")
-
-    def unlock_door(self, room_objects):
-        if self.has_key:
-            print("You use the key to unlock the door.")
-            #room_objects[door_position] = "Unlocked Door"
-        else:
-            print("You attempt to open the door and it won't budge. Maybe a key will help?")
