@@ -47,67 +47,44 @@ class Link:
             return
         
         #Reset neaby objects before each scan
-        self.nearby_objects = {}        
+        self.nearby_objects = {}
+        detected_objects = []        
 
-        # Limited scan if Echo Lens strength is less than 2
-        if self.echo_lens_strength < 2:
-            print("Echo Lens Scan:")
-            for step in range(1, self.echo_lens_strength + 1):
-                # Determine target position based on Link's facing direction
-                if self.facing == "forward":
-                    target = (self.position["x"], self.position["y"] + step)
-                elif self.facing == "backward":
-                    target = (self.position["x"], self.position["y"] - step)
-                elif self.facing == "left":
-                    target = (self.position["x"] - step, self.position["y"])
-                elif self.facing == "right":
-                    target = (self.position["x"] + step, self.position["y"])
-
-                # Check if there is an object in that direction
-                if target in room_objects:
-                    obj = room_objects[target]
-                    self.nearby_objects[obj] = target # Stores nearby objects
-                    print(f"- {obj} ahead at {step} step(s) away")
-                else:
-                    print("- Empty space ahead")
-            return
-
+         # Scan logic based on Echo Lens strength
         print("Echo Lens: ‘Scanning the room… the echoes reveal the unseen.’")
-        detected_objects = []
-
-    # Loop through each object in the room and calculate relative position, up to `echo_lens_strength`
         for pos, obj in room_objects.items():
-            dx = pos[0] - self.position["x"]
-            dy = pos[1] - self.position["y"]
-        
-            # Calculate the distance to each object
+            dx, dy = pos[0] - self.position["x"], pos[1] - self.position["y"]
             distance = max(abs(dx), abs(dy))
-        
-            # Skip if object is out of range for the current echo lens strength
+            
+            # Skip objects out of range for current Echo Lens strength
             if distance > self.echo_lens_strength:
                 continue
 
-        # Store interactable objects in front of Link as nearby
-            if abs(dx) <= 1 and abs(dy) <= 1 and (
-            (self.facing == "forward" and dy == 1) or
-            (self.facing == "backward" and dy == -1) or
-            (self.facing == "left" and dx == -1) or
-            (self.facing == "right" and dx == 1)
-        ):
+            # Store interactable objects in front of Link
+            if self.is_in_front(dx, dy):
                 self.nearby_objects[obj] = pos
                 print(f"You sense a {obj} in front of you.")
 
-            # Determine directions based on relative position
+            # Add details to detected objects
             direction_fb = "forward" if dy > 0 else "backward"
             direction_lr = "right" if dx > 0 else "left"
-        
-            # Format the output for each detected object within lens strength
             detected_objects.append(f"{obj}: {abs(dy)} step(s) {direction_fb}, {abs(dx)} step(s) {direction_lr}")
-    
-        # Print all detected objects in the room
+
+        # Print detected objects
         print("Objects detected:")
         for item in detected_objects:
             print(f"- {item}")
+
+    def is_in_front(self, dx, dy):
+        # Helper method to check if object is in front based on Link's facing direction
+        facing_directions = {
+            "forward": (0, 1),
+            "backward": (0, -1),
+            "left": (-1, 0),
+            "right": (1, 0)
+        }
+        fx, fy = facing_directions[self.facing]
+        return dx == fx and dy == fy
 
     # Function to unlock the door
     def unlock_door(self):
