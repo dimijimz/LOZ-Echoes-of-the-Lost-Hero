@@ -57,7 +57,13 @@ def main():
 ## Start of the adventure
     while True:
         command = input("Type 'start' to begin the quest of the Lost Hero: ")
-        if command.lower() == "start":
+        # Skips the intro
+        if command.lower() == "skip":
+            print("Skipping the intro... Prepare to enter the game directly!")
+            link.obtain_echo_lens()  # Grant the Echo Lens instantly
+            break  # Exit this loop and move to the main game loop
+
+        elif command.lower() == "start":
             print("\nThe void of The Depths envelops you. There is no light, no form, only an overwhelming sense of emptiness.")
             time.sleep(5)
             print("This isn't the mere absence of light; it's as though the very fabric of reality is pulling you into itself.")
@@ -76,21 +82,21 @@ def main():
             print("Invalid command. Please try typing 'start'.")
 
 # First step and discovery of the Echo Lens
-    while True:
-        first_move = input("\nYour body feels stiff, hesitant, yet an invisible force drives you onward. Type 'forward' or 'w' to step ahead: ")
-        if first_move.lower() == "forward" or first_move.lower() == "w":
-            print("\nYou take a trembling step forward. The silence is shattered by the sudden crunch beneath your foot.")
-            time.sleep(5)
-            print("Startled, you reach down and your hand closes around the object. It's been damaged, but faintly alive,")
-            time.sleep(5)
-            print("pulsing with warmth. Though you cannot see it, the sensation of its energy courses through your fingertips.")
-            time.sleep(5)
-            print("As you hold it, a faint yet familiar whisper drifts through the air.")
-            time.sleep(5)
-            print("The whisper grows, like an echo bouncing off unseen walls, until it becomes clear. It speaks a name:")
-             # Adding a pause for the reveal of the Echo Lens
-            time.sleep(5) #15 is the best pause time for this part
-            print(r"""
+        while True:
+            first_move = input("\nYour body feels stiff, hesitant, yet an invisible force drives you onward. Type 'forward' or 'w' to step ahead: ")
+            if first_move.lower() == "forward" or first_move.lower() == "w":
+                print("\nYou take a trembling step forward. The silence is shattered by the sudden crunch beneath your foot.")
+                time.sleep(5)
+                print("Startled, you reach down and your hand closes around the object. It's been damaged, but faintly alive,")
+                time.sleep(5)
+                print("pulsing with warmth. Though you cannot see it, the sensation of its energy courses through your fingertips.")
+                time.sleep(5)
+                print("As you hold it, a faint yet familiar whisper drifts through the air.")
+                time.sleep(5)
+                print("The whisper grows, like an echo bouncing off unseen walls, until it becomes clear. It speaks a name:")
+                 # Adding a pause for the reveal of the Echo Lens
+                time.sleep(5) #15 is the best pause time for this part
+                print(r"""
     ███        ▄█    █▄       ▄████████          
 ▀█████████▄   ███    ███     ███    ███          
    ▀███▀▀██   ███    ███     ███    █▀           
@@ -119,20 +125,21 @@ def main():
 █████▄▄██   ██████████  ▀█   █▀   ▄████████▀     
 ▀                                                """)
 
-            time.sleep(4) #slight 4 pause and new line for dramatic effect
-            print("\nThe voice is familiar, yet unknown, as if it has always been a part of you. You feel a connection to the object,")
-            print("as if it holds the key to navigating this endless darkness. Not through sight, but through the echoes of sound and instinct.")
-            print("This will guide you through the eternal darkness. Without it, the path ahead would be lost to you forever.")
+                time.sleep(4) #slight 4 pause and new line for dramatic effect
+                print("\nThe voice is familiar, yet unknown, as if it has always been a part of you. You feel a connection to the object,")
+                print("as if it holds the key to navigating this endless darkness. Not through sight, but through the echoes of sound and instinct.")
+                print("This will guide you through the eternal darkness. Without it, the path ahead would be lost to you forever.")
             
-            link.obtain_echo_lens()  # Link obtains the Echo Lens!
-            
-            break
-        else:
-            print("You cannot turn back. The only path is forward. Type 'forward' or 'w' to step ahead.")
-    
-    
-    #MAIN GAME LOOP (Checks the players health or alive)
-      # Main game loop
+                link.obtain_echo_lens()  # Link obtains the Echo Lens!
+                break
+            else:
+                print("You cannot turn back. The only path is forward. Type 'forward' or 'w' to step ahead.")
+        break       
+
+
+
+    ## MAIN GAME LOOP ##
+
     while link.check_health() and current_room <= total_rooms:
         # Generate the room layout for the current room number
         room_data = generate_fixed_room(current_room)
