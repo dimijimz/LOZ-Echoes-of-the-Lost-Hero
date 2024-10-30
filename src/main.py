@@ -1,5 +1,5 @@
 from Link import Link 
-from game_logic import check_player_health, generate_room
+from game_logic import check_player_health, generate_fixed_room
 import time
 
 def main():
@@ -17,13 +17,16 @@ def main():
                             |+H+H+H+|
                             \       /
                              ^-----^
-          Welcome to Legend of Zelda: Echoes of the Lost Hero!""")
+          Welcome to Legend of Zelda: Echoes of the Lost Hero!\n A game developed by Dimitri Jimenez""")
     
     # Create a new instance of class: Link
     link = Link()
 
-    # Retrieve dungeon size and room objects
-    dungeon_size, room_objects = generate_room()
+    # Define total number of rooms and initialize room tracking
+    total_rooms = 10
+    current_room = 1
+
+
 ## Start of the adventure
     while True:
         command = input("Type 'start' to begin the quest of the Lost Hero: ")
@@ -71,7 +74,9 @@ def main():
             print("\nThe voice is familiar, yet unknown, as if it has always been a part of you. You feel a connection to the object,")
             print("as if it holds the key to navigating this endless darkness. Not through sight, but through the echoes of sound and instinct.")
             print("This will guide you through the eternal darkness. Without it, the path ahead would be lost to you forever.")
+            
             link.obtain_echo_lens()  # Link obtains the Echo Lens!
+            
             break
         else:
             print("You cannot turn back. The only path is forward. Type 'forward' or 'w' to step ahead.")

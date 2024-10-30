@@ -118,8 +118,21 @@ class Link:
         for item in detected_objects:
             print(f"- {item}")
 
-    
-    
+    # Function to unlock the door
+    def unlock_door(self):
+        # Checks if there is a "Locked Door" nearby
+        if "Locked Door" in self.nearby_objects:
+            if self.has_key:
+                print("You use the key to unlock the door. It swings open, granting you access to the next room.")
+                self.has_key = False  # Consumes the key after use
+                return True  # Door successfully unlocked
+            else:
+                print("You attempt to open the door, but it’s locked. A key is needed to unlock it.")
+                return False  # Door remains locked
+        else:
+            print("There's no door here to unlock.")
+            return False  # No door to unlock
+        
     # Function to obtain the Echo Lens
     def obtain_echo_lens(self):
         self.has_echo_lens = True
