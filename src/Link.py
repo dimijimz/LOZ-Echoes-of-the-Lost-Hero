@@ -52,6 +52,14 @@ class Link:
         else:
             print("You walk straight into a wall. I guess we can't go that way!")
 
+    def update_nearby_objects(self, room_objects):
+        self.nearby_objects = {}
+        current_position = (self.position["x"], self.position["y"])
+        if current_position in room_objects:
+            obj = room_objects[current_position]
+            self.nearby_objects[obj] = current_position
+            print(f"You are at {obj}.")
+
 
     def scan(self, room_objects, dungeon_size):
         # Check if Link has the Echo Lens
@@ -76,10 +84,11 @@ class Link:
             "right": (1, 0)
         }
 
-        # First, check if Link is on top of any object
-        if (self.position["x"], self.position["y"]) in room_objects:
-            obj = room_objects[(self.position["x"], self.position["y"])]
-            self.nearby_objects[obj] = (self.position["x"], self.position["y"])
+        # Check if Link is directly on top of any object
+        current_position = (self.position["x"], self.position["y"])
+        if current_position in room_objects:
+            obj = room_objects[current_position]
+            self.nearby_objects[obj] = current_position
             print(f"{obj} is right in front of you.")
 
         # For each direction, detect objects within the scan range
@@ -87,21 +96,22 @@ class Link:
             for step in range(1, scan_range + 1):
                 target_position = (self.position["x"] + dx * step, self.position["y"] + dy * step)
         
-            # Check if the target is within dungeon bounds
-            x, y = target_position
-            if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
-                # Detect objects within range
-                if target_position in room_objects:
-                    obj = room_objects[target_position]
-                    self.nearby_objects[obj] = target_position
-                    detected_objects.append(f"{obj} detected {step} step(s) {direction}.")
-                    break  # Stop further scanning in this direction if an object is detected
-            else:
-                # Mark wall detection and stop further in this direction
-                detected_objects.append(f"Wall detected {step} step(s) {direction}.")
-                break
+                # Check if the target position is within dungeon bounds
+                x, y = target_position
+                if 0 <= x < dungeon_size["width"] and 0 <= y < dungeon_size["height"]:
+                    # Detect objects within range
+                    if target_position in room_objects:
+                        obj = room_objects[target_position]
+                        if obj not in self.nearby_objects:  # Avoid duplicates
+                            self.nearby_objects[obj] = target_position
+                            detected_objects.append(f"{obj} detected {step} step(s) {direction}.")
+                        break  # Stop further scanning in this direction if an object is detected
+                else:
+                    # Detect walls and stop further in this direction if a wall is reached
+                    detected_objects.append(f"Wall detected {step} step(s) {direction}.")
+                    break
 
-        # Print detected objects or wall info once
+        # Print detected objects or wall info
         if detected_objects:
             print("Objects detected:")
             for item in detected_objects:
@@ -145,3 +155,5 @@ class Link:
     def check_health(self):
         """Check if Link's health is above zero."""
         return self.health > 0
+    
+    
