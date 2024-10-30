@@ -149,15 +149,38 @@ def main():
         print(f"\nEntering Room {current_room}")
 
         # Room 5 Echo Lens Upgrade Cutscene
-        if current_room == 5:
-            print("\nIn the center of the room lies an ornate chest, glimmering faintly in the darkness.")
-            command = input("Would you like to approach the chest and open it? [yes/no]: ")
-            if command.lower() == "yes":
-                print("\nYou open the chest and find an upgraded Echo Lens. Its power seems to grow stronger!")
-                link.upgrade_echo_lens()
+    if current_room == 5:
+        print("\nYou feel an undeniable pull, as though the Echo Lens itself is urging you forward. The lens trembles in your hand, then slips free,")
+        print("floating just beyond your reach. Darkness settles around you again, but a faint hum from the Lens pulses ahead.")
+        time.sleep(2)
 
-        # Room interaction loop
+        # Prompting player input to move forward
         while True:
+            advance = input("\nThe only way is forward. Type 'forward' or 'w' to step toward the unknown: ")
+            if advance.lower() in ["forward", "w"]:
+                print("\nAs you step forward, the Lens begins to emit a low, resonant tone. Each step draws you closer, the air growing dense with a strange energy.")
+                print("Then, with a final pulse, the Echo Lens returns to your hand, settling with a newfound weight.")
+                time.sleep(3)
+                break
+            else:
+                print("You feel the pull stronger than ever. Type 'forward' or 'w' to step into the unknown.")
+
+        print("\nHolding the Echo Lens, you sense an undeniable power radiating from it, stronger than ever. As you activate the lens,")
+        print("the surrounding darkness recedes, revealing not just outlines but the entire chamber with a surreal, crystalline clarity.")
+    
+        time.sleep(1.5)
+        print("\nThis is no ordinary room. The Echo Lens reveals it as a Hall of Resonance, a place designed to amplify echoes and energy.")
+        print("With each pulse of the lens, the chamber's walls seem to breathe, revealing shifting pathways and subtle inscriptions that whisper of ancient secrets.")
+    
+        link.upgrade_echo_lens()
+        print("\nThe power of the Echo Lens has expanded; you sense the entire room as if each detail is woven into your mind. The lens feels")
+        print("like a part of you now, attuned to reveal depths beyond sight. You move forward, guided by its amplified resonance.")
+
+
+
+        # Inner loop for room interactions until the player exits to the next room
+        while True:
+            # Dynamic options based on nearby objects
             options = ["move", "scan", "quit game"]
             for obj in link.nearby_objects:
                 if obj == "Locked Door":
@@ -166,20 +189,30 @@ def main():
                     options.append("open chest")
                 elif obj == "Torch Stand":
                     options.append("light torch")
-
+            
+            # Prompt player for command and provide available options
             command = input(f"What would you like to do? {options}: ")
-
+            
+            # Quit game option
             if command == "quit" or command == "quit game":
                 print("Thanks for playing!")
                 return
-
+            
+            # Scan the room for nearby objects or walls
             elif command == "scan":
                 link.scan(room_objects, dungeon_size)
 
-            elif command == "move":
-                direction = input("What direction? [forward(W), backward(S), left(A), right(D)] ")
+
+            # Handle movement with direct inputs (w, a, s, d) or "move <direction>"
+            elif command in ["w", "a", "s", "d"]:
+                link.move(command, dungeon_size)
+                link.nearby_objects = {}  # Clear nearby objects on each move
+
+            elif command.startswith("move "):
+                # Split the command and extract direction if it's a move command
+                direction = command.split(" ")[1]
                 link.move(direction, dungeon_size)
-                link.nearby_objects = {}
+                link.nearby_objects = {}                       
 
             elif command == "open door" and "Locked Door" in link.nearby_objects:
                 if link.unlock_door():  # Call the unlock_door method in Link
@@ -191,9 +224,6 @@ def main():
                     link.obtain_key()
                 else:
                     print("The chest is empty.")
-
-            elif command == "light torch" and "Torch Stand" in link.nearby_objects:
-                print("You light the torch, illuminating part of the room.")
 
             else:
                 print("Invalid command or no object nearby to interact with.")
